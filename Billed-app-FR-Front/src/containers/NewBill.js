@@ -18,8 +18,20 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const errorMessage = this.document.querySelector('#error-file-format');
+    const submitBtn = this.document.querySelector('#btn-send-bill');
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+   // console.log(file.type); 
+    const acceptedFormat = ['image/jpg', 'image/png', 'image/jpeg'];
+    //acceptedFormat.includes(file.type) ? errorMessage.dataset.display = "hidden" : errorMessage.dataset.display === "visible";
+    if (acceptedFormat.includes(file.type)) {
+      errorMessage.dataset.display = "hidden";
+      submitBtn.disabled = false;
+    } else {
+      errorMessage.dataset.display = "visible";
+      submitBtn.disabled = true; 
+    }
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)

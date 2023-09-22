@@ -18,15 +18,17 @@ const row = (bill) => {
     </tr>
     `)
   }
-
-const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
-}
+  const rows = (data) => {
+    if (data) {
+      data.sort( (c,b) => Date.parse(b.date)-Date.parse(c.date) )
+    }
+    return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  }
 
 export default ({ data: bills, loading, error }) => {
   
   const modal = () => (`
-    <div class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div  data-testid="img-modal" class="modal fade" id="modaleFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
