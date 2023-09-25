@@ -10,7 +10,7 @@ import { ROUTES_PATH, ROUTES} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import userEvent from "@testing-library/user-event"; 
 import router from "../app/Router.js";
- 
+import mockStore from "../__mocks__/store"
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
@@ -182,10 +182,81 @@ describe("Given I am connected as an employee", () => {
   
     });
 
+    // Test d'intégration POST:
+    describe("When I click on Envoyer", () => {
+      test("A bill is created", async  () => {
+        //creation du dom 
+        document.body.innerHTML = NewBillUI()
+          
+          const onNavigate = (pathname) => {
+            document.body.innerHTML = ROUTES({pathname});
+          };
+        // connexion
+        Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+        window.localStorage.setItem('user', JSON.stringify({
+              type: 'Employee',
+              email: "azerty@email.com",
+        }))
+
+        let newBill = new NewBill({
+          document,
+          onNavigate,
+          store: mockStore,
+          localStorage: window.localStorage,
+        })
+
+        const mockBill = {
+          "id": "47qAXb6fIm2zOKkLzMro",
+          "vat": "80",
+          "fileUrl": "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
+          "status": "pending",
+          "type": "Hôtel et logement",
+          "commentary": "séminaire billed",
+          "name": "encore",
+          "fileName": "preview-facture-free-201801-pdf-1.jpg",
+          "date": "2004-04-04",
+          "amount": 400,
+          "commentAdmin": "ok",
+          "email": "a@a",
+          "pct": 20
+        }
+
+            /* datas mockés dans les champs formulaire   */
+            screen.getByTestId("expense-type").value = mockBill.type;
+            screen.getByTestId("expense-name").value = mockBill.name;
+            screen.getByTestId("datepicker").value = mockBill.date;
+            screen.getByTestId("amount").value = mockBill.amount;
+            screen.getByTestId("vat").value = mockBill.vat;
+            screen.getByTestId("pct").value = mockBill.pct;
+            screen.getByTestId("commentary").value = mockBill.commentary;
+            mockBill.fileName = mockBill.fileName;
+            mockBill.fileUrl = mockBill.fileUrl;
+
+                /* appel de fonction et événement*/
+            newBill.updateBill = jest.fn()
+            const handleSubmit = jest.fn((e) => newBill.handleSubmit(e))
+            const form = screen.getByTestId("form-new-bill")
+            await waitFor(() => screen.getByTestId("btn-send-bill'"))
+            const btn = screen.getByTestId("btn-send-bill'") 
+            const file = screen.getByTestId("file") 
+            form.addEventListener("submit", handleSubmit)
+            userEvent.click(btn)
+            
+            /* Vérification appel de fonction  handleSubmit */
+           /* expect(handleSubmit).toHaveBeenCalled()*/
+            /* Vérification appel de la méthode updateBill  */
+            /*expect(newBill.updateBill).toHaveBeenCalled()*/
+            /* Vérification redirectionné à la page Mes notes de frais après le clic du bouton envoyé  */
+            /*expect(screen.getByText('Mes notes de frais')).toBeTruthy() */
+
+
+      })
+    })
 
 
 
+})
 
 
   })
-})
+
