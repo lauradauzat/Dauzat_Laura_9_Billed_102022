@@ -46,8 +46,7 @@ describe("Given I am connected as an employee", () => {
       // Test d'intégration POST:
      describe("When I click on Envoyer", () => {
           test("A bill is created", async  () => {
-        
-      
+
             const formNewBill = screen.getByTestId("form-new-bill")
             expect(formNewBill).toBeTruthy()
             const btnNewBill = screen.getByTestId("btn-send-bill")
@@ -76,7 +75,7 @@ describe("Given I am connected as an employee", () => {
 
             btnNewBill.addEventListener("click", handleSubmit)
             userEvent.click(btnNewBill)
-            expect(handleSubmit).toHaveBeenCalled()
+            expect(handleSubmit).toHaveBeenCalled();
 
           })
      })
@@ -228,5 +227,5 @@ describe("Given I am connected as an employee", () => {
 })
 
 
-  })
+})
 
