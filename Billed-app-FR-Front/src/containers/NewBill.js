@@ -13,7 +13,15 @@ export default class NewBill {
     this.fileUrl = null
     this.fileName = null
     this.billId = null
+    const myBills = document.getElementById('layout-icon1')
+    if(myBills) myBills.addEventListener('click', this.handleClickMyBills)
     new Logout({ document, localStorage, onNavigate })
+   }
+
+
+  handleClickMyBills = () => {
+    console.log('myBills clicked')
+    this.onNavigate(ROUTES_PATH['Bills'])
   }
   handleChangeFile = e => {
     e.preventDefault()
@@ -31,6 +39,7 @@ export default class NewBill {
     } else {
       errorMessage.dataset.display = "visible";
       submitBtn.disabled = true; 
+ 
     }
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
@@ -46,7 +55,7 @@ export default class NewBill {
         }
       })
       .then(({fileUrl, key}) => {
-        //console.log(fileUrl)
+        console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName

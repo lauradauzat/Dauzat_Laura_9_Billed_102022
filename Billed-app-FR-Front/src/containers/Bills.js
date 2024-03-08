@@ -13,7 +13,15 @@ export default class {
     if (iconEye) iconEye.forEach(icon => {
       icon.addEventListener('click', () => this.handleClickIconEye(icon))
     })
+    const newBillIcon = document.querySelector(`div[data-testid="icon-mail"]`)
+    if(newBillIcon) newBillIcon.addEventListener('click', this.handleClickNewBill)
+
     new Logout({ document, localStorage, onNavigate })
+  }
+
+  handleClickMyBills = () => {
+    console.log('myBills clicked')
+    this.onNavigate(ROUTES_PATH['Bills'])
   }
 
   handleClickNewBill = () => {
